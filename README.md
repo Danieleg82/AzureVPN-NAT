@@ -22,7 +22,7 @@ We will cover the differences between Static and Dynamic NAT modes with relevant
 
 In this first part, we will build a basic environment composed as per the following diagram:
 
-![](RackMultipart20220324-4-60kjve_html_5ca616f4c803e791.png)
+![](../master/Images/Lab1.jpg)
 
 A first VNET will emulate an onprem branch to be connected to Azure side.
 
