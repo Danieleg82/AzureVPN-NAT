@@ -39,7 +39,7 @@ The Onprem-side traffic will be seen by Azure as originated from network range 1
 To create the basic environment, please run the following terraform deployment script:
 
 
-<span style="background-color:Black">_XXXXXX_</span>
+_XXX_
 
 _Instructions for GitHub deployment_
 
@@ -71,31 +71,38 @@ As first step we need to proceed with the creation of a **LocalNetworkGateway** 
 
 _LNG_
 
-$RG = &quot;VPNGWNATRG&quot;
+```Powershell
 
-$Location = &quot;West Europe&quot;
+$RG = "VPNGWNATRG"
 
-$GWName = &quot;AzureGW&quot;
+$Location = "West Europe"
+
+$GWName = "AzureGW"
 
 $CSRPublicIP = Get-AzPublicIpAddress -Name CSRVIP -ResourceGroupName $RG
 
-$LNG = New-AzLocalNetworkGateway -Name OnpremLNG -ResourceGroupName $RG `
+$LNG = New-AzLocalNetworkGateway -Name OnpremLNG -ResourceGroupName $RG -Location $Location -GatewayIpAddress $CSRPublicIP.ipAddress -BgpPeeringAddress '192.168.1.1' -Asn 65001
 
--Location $Location -GatewayIpAddress $CSRPublicIP.ipAddress -BgpPeeringAddress &#39;192.168.1.1&#39; -Asn 65001
+```
 
 _NAT rules_
 
+```Powershell
 $VPNGW = Get-AzVirtualNetworkGateway -Name $GWName -ResourceGroupName $RG
 
-$egressnatrule = New-AzVirtualNetworkGatewayNatRule -Name &quot;EgressRule&quot; -Type &quot;Static&quot; -Mode &quot;EgressSnat&quot; -InternalMapping @(&quot;10.0.1.0/24&quot;) -ExternalMapping @(&quot;100.0.1.0/24&quot;)
+$egressnatrule = New-AzVirtualNetworkGatewayNatRule -Name "EgressRule" -Type "Static" -Mode "EgressSnat" -InternalMapping @("10.0.1.0/24") -ExternalMapping @("100.0.1.0/24")
 
-$ingressnatrule = New-AzVirtualNetworkGatewayNatRule -Name &quot;IngressRule&quot; -Type &quot;Static&quot; -Mode &quot;IngressSnat&quot; -InternalMapping @(&quot;10.0.1.0/24&quot;) -ExternalMapping @(&quot;100.0.2.0/24&quot;)
+$ingressnatrule = New-AzVirtualNetworkGatewayNatRule -Name "IngressRule" -Type "Static" -Mode "IngressSnat" -InternalMapping @("10.0.1.0/24") -ExternalMapping @(";100.0.2.0/24")
 
 Set-AzVirtualNetworkGateway -VirtualNetworkGateway $VPNGW -NatRule $ingressnatrule,$egressnatrule -BgpRouteTranslationForNat $true
 
+```
+
 _Connection_
 
-New-AzVirtualNetworkGatewayConnection -Name Connection -ResourceGroupName $RG -Location $Location -VirtualNetworkGateway1 $VPNGW -LocalNetworkGateway2 $LNG -ConnectionType IPsec -EnableBgp $true -ConnectionProtocol IKEv2 -SharedKey &#39;MyVPNConnection1!&#39; -IngressNatRule $ingressnatrule -EgressNatRule $egressnatrule
+```Powershell
+New-AzVirtualNetworkGatewayConnection -Name Connection -ResourceGroupName $RG -Location $Location -VirtualNetworkGateway1 $VPNGW -LocalNetworkGateway2 $LNG -ConnectionType IPsec -EnableBgp $true -ConnectionProtocol IKEv2 -SharedKey 'MyVPNConnection1!' -IngressNatRule $ingressnatrule -EgressNatRule $egressnatrule
+```
 
 **TASK 3 – Configure Cisco and UDRs**
 
