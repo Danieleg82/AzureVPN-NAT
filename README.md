@@ -100,7 +100,6 @@ New-AzVirtualNetworkGatewayConnection -Name Connection -ResourceGroupName $RG -L
 Acquire JIT access to your Cisco CSR deployment – if needed – or create dedicated security rules in the NSG bound to the external subnet of the CSR (CSRExternalSubnet) to grant SSH connectivity from your public IP.
 
     admin_username = LabAdmin
-
     admin_password = VPNGWNAT!
 
 SSH to the CSR
@@ -121,124 +120,68 @@ Apply the following configuration script, paste in below configuration one block
 
 ```
 crypto ikev2 proposal Azure-Ikev2-Proposal
-
 encryption aes-cbc-256
-
 integrity sha1 sha256
-
 group 2
-
 !
-
 crypto ikev2 policy Azure-Ikev2-Policy
-
 match address local 10.0.3.4
-
 proposal Azure-Ikev2-Proposal
-
 !
-
 crypto ikev2 keyring to-onprem-keyring
-
 peer <VPNGWPublicIP>
-
 address <VPNGWPublicIP>
-
 pre-shared-key MyVPNConnection1!
-
 !
-
 crypto ikev2 profile Azure-Ikev2-Profile
-
 match address local 10.0.3.4
-
 match identity remote address <VPNGWPublicIP>
-
 authentication remote pre-share
-
 authentication local pre-share
-
 keyring local to-onprem-keyring
-
 lifetime 28800
-
 dpd 10 5 on-demand
-
 !
-
 crypto ipsec transform-set to-Azure-TransformSet esp-gcm 256
-
 mode tunnel
-
 !
-
 crypto ipsec profile to-Azure-IPsecProfile
-
 set transform-set to-Azure-TransformSet
-
 set ikev2-profile Azure-Ikev2-Profile
-
 !
-
 interface Loopback1
-
 ip address 192.168.1.1 255.255.255.255
-
 !
-
 interface Tunnel1
-
 ip address 10.0.3.10 255.255.255.255
-
 ip tcp adjust-mss 1350
-
 tunnel source 10.0.3.4
-
 tunnel mode ipsec ipv4
-
 tunnel destination <VPNGWPublicIP>
-
 tunnel protection ipsec profile to-Azure-IPsecProfile
-
 !
-
 router bgp 65001
-
 bgp router-id 192.168.1.1
-
 bgp log-neighbor-changes
-
 neighbor 10.0.2.254 remote-as 65600
-
 neighbor 10.0.2.254 ebgp-multihop 255
-
 neighbor 10.0.2.254 update-source Loopback1
-
 !
-
 address-family ipv4
-
 neighbor 10.0.2.254 activate
-
 network 10.0.1.0 mask 255.255.255.0
-
 exit-address-family
-
 !
-
 !Static route to Azure BGP peer IP
-
 ip route 10.0.2.254 255.255.255.255 Tunnel1
-
 !Static route to internal workload subnet
-
 ip route 10.0.1.0 255.255.255.0 10.0.10.1
 ```
 
 Type "Exit" or "End" or simply hit CTRL+Z to exit configurator, then type
 
 ```
-Wr
+W
 ```
 
 Validate the status of the IKEv2 tunnel:
@@ -492,13 +435,9 @@ Then:
 
 ```
 router bgp 65001
-
 address-family ipv4
-
 network 192.168.25.0 mask 255.255.255.0
-
 exit-address-family
-
 ip route 192.168.25.0 255.255.255.0 10.0.10.1
 ```
 
