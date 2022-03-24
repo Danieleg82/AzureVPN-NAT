@@ -72,13 +72,9 @@ _LNG_
 ```Powershell
 
 $RG = "VPNGWNATRG"
-
 $Location = "West Europe"
-
 $GWName = "AzureGW"
-
 $CSRPublicIP = Get-AzPublicIpAddress -Name CSRVIP -ResourceGroupName $RG
-
 $LNG = New-AzLocalNetworkGateway -Name OnpremLNG -ResourceGroupName $RG -Location $Location -GatewayIpAddress $CSRPublicIP.ipAddress -BgpPeeringAddress '192.168.1.1' -Asn 65001
 
 ```
@@ -87,11 +83,8 @@ _NAT rules_
 
 ```Powershell
 $VPNGW = Get-AzVirtualNetworkGateway -Name $GWName -ResourceGroupName $RG
-
 $egressnatrule = New-AzVirtualNetworkGatewayNatRule -Name "EgressRule" -Type "Static" -Mode "EgressSnat" -InternalMapping @("10.0.1.0/24") -ExternalMapping @("100.0.1.0/24")
-
 $ingressnatrule = New-AzVirtualNetworkGatewayNatRule -Name "IngressRule" -Type "Static" -Mode "IngressSnat" -InternalMapping @("10.0.1.0/24") -ExternalMapping @(";100.0.2.0/24")
-
 Set-AzVirtualNetworkGateway -VirtualNetworkGateway $VPNGW -NatRule $ingressnatrule,$egressnatrule -BgpRouteTranslationForNat $true
 
 ```
@@ -298,13 +291,9 @@ An integration with **Azure Route Server** in our emulated onprem environment wo
 
 ```Powershell
 $RG = "VPNGWNATRG"
-
 $Location = "West Europe"
-
 $OnpremRT = New-AzRouteTable -Name 'OnpremRT' -ResourceGroupName $RG -location $Location
-
 Get-AzRouteTable -ResourceGroupName $RG -Name 'OnpremRT'| Add-AzRouteConfig -Name "ToAzure" -AddressPrefix 100.0.0.0/16 -NextHopType "VirtualAppliance" -NextHopIpAddress 10.0.10.4 | Set-AzRouteTable
-
 Get-AzVirtualNetwork -Name 'OnpremVNET' -ResourceGroupName $RG | Set-azvirtualnetworksubnetConfig -Name 'Subnet1' -AddressPrefix 10.0.1.0/24 -RouteTable $OnpremRT | set-AzVirtualNetwork
 ```
 
@@ -371,15 +360,10 @@ As first step we will disassociate existing EgressNAT rules from our connection:
 
 ```Powershell
 $RG = "VPNGWNATRG"
-
 $GWName = "AzureGW"
-
 $VPNGW = Get-AzVirtualNetworkGateway -Name $GWName -ResourceGroupName $RG
-
 $connection = Get-AzVirtualNetworkGatewayConnection -Name Connection -ResourceGroupName $RG
-
 $connection.EgressNatRules = $null
-
 Set-AzVirtualNetworkGatewayConnection -VirtualNetworkGatewayConnection $connection -Force
 ```
 
@@ -389,9 +373,7 @@ We will now create an Egress Dynamic NAT rule linking traffic from Azure side to
 
 ```Powershell
 $GWIPconfig= $VPNGW.IpConfigurations.id
-
 $Dynamicegressnatrule = New-AzVirtualNetworkGatewayNatRule -Name "DynamicEgressRule" -Type "Dynamic" -IpConfigurationId $GWIPconfig -Mode "EgressSnat" -InternalMapping @("10.0.1.0/24") -ExternalMapping @("100.0.1.15/32")
-
 Set-AzVirtualNetworkGateway -VirtualNetworkGateway $VPNGW -NatRule $Dynamicegressnatrule -BgpRouteTranslationForNat $true
 ```
 
@@ -399,9 +381,7 @@ We will finally link the new NAT rule to the existing VPN connection:
 
 ```Powershell
 $Dynamicegressnatrule = Get-AzVirtualNetworkGatewayNatRule -ResourceGroupName $RG -Name "DynamicEgressRule" -ParentResourceName $GWName
-
 $connection.EgressNatRules = $Dynamicegressnatrule
-
 Set-AzVirtualNetworkGatewayConnection -VirtualNetworkGatewayConnection $connection -Force
 ```
 
@@ -473,13 +453,9 @@ Let's start adding an extra address space to our onprem network:
 
 ```Powershell
 $RG="VPNGWNATRG"
-
 $Location="West Europe"
-
 $VNET=Get-AzVirtualNetwork-NameOnpremVNET-ResourceGroupName$RG
-
 $VNET.AddressSpace.AddressPrefixes.Add("192.168.25.0/24")
-
 Set-AzVirtualNetwork-VirtualNetwork$VNET
 ```
 
