@@ -38,15 +38,13 @@ The Onprem-side traffic will be seen by Azure as originated from network range 1
 
 To create the basic environment, please run the following terraform deployment script:
 
+```
 
-_XXX_
+Instructions for GitHub deployment
 
-_Instructions for GitHub deployment_
+Launch Main.tf
 
-_Launch Main.tf_
-
-_XXXXXX_
-    
+```
 
 This will take around 20 minutes to complete to accommodate the time to deploy VNET Gateway
 
@@ -112,145 +110,157 @@ Acquire JIT access to your Cisco CSR deployment – if needed – or create dedi
 
     admin_password = VPNGWNAT!
 
-SSH to the CSR:
+SSH to the CSR
 
 Go to command prompt and type:
 
+```
 ssh LabAdmin@CSRPublicIP
+```
 
 Once connected to the CSR, enter config mode:
 
-_Conf t_
+```
+Conf t
+```
 
 Apply the following configuration script, paste in below configuration one block at a time, make sure to replace _VPNGWPublicIP_ with the IP of your VPN gateway:
 
-_crypto ikev2 proposal Azure-Ikev2-Proposal_
+```
+crypto ikev2 proposal Azure-Ikev2-Proposal
 
-_encryption aes-cbc-256_
+encryption aes-cbc-256
 
-_integrity sha1 sha256_
+integrity sha1 sha256
 
-_group 2_
+group 2
 
-_!_
+!
 
-_crypto ikev2 policy Azure-Ikev2-Policy_
+crypto ikev2 policy Azure-Ikev2-Policy
 
-_match address local 10.0.3.4_
+match address local 10.0.3.4
 
-_proposal Azure-Ikev2-Proposal_
+proposal Azure-Ikev2-Proposal
 
-_!_
+!
 
-_crypto ikev2 keyring to-onprem-keyring_
+crypto ikev2 keyring to-onprem-keyring
 
-_peer \&lt;VPNGWPublicIP\&gt;_
+peer <VPNGWPublicIP>
 
-_address \&lt;VPNGWPublicIP\&gt;_
+address <VPNGWPublicIP>
 
-_pre-shared-key MyVPNConnection1!_
+pre-shared-key MyVPNConnection1!
 
-_!_
+!
 
-_crypto ikev2 profile Azure-Ikev2-Profile_
+crypto ikev2 profile Azure-Ikev2-Profile
 
-_match address local 10.0.3.4_
+match address local 10.0.3.4
 
-_match identity remote address \&lt;VPNGWPublicIP\&gt;_
+match identity remote address <VPNGWPublicIP>
 
-_authentication remote pre-share_
+authentication remote pre-share
 
-_authentication local pre-share_
+authentication local pre-share
 
-_keyring local to-onprem-keyring_
+keyring local to-onprem-keyring
 
-_lifetime 28800_
+lifetime 28800
 
-_dpd 10 5 on-demand_
+dpd 10 5 on-demand
 
-_!_
+!
 
-_crypto ipsec transform-set to-Azure-TransformSet esp-gcm 256_
+crypto ipsec transform-set to-Azure-TransformSet esp-gcm 256
 
-_mode tunnel_
+mode tunnel
 
-_!_
+!
 
-_crypto ipsec profile to-Azure-IPsecProfile_
+crypto ipsec profile to-Azure-IPsecProfile
 
-_set transform-set to-Azure-TransformSet_
+set transform-set to-Azure-TransformSet
 
-_set ikev2-profile Azure-Ikev2-Profile_
+set ikev2-profile Azure-Ikev2-Profile
 
-_!_
+!
 
-_interface Loopback1_
+interface Loopback1
 
-_ip address 192.168.1.1 255.255.255.255_
+ip address 192.168.1.1 255.255.255.255
 
-_!_
+!
 
-_interface Tunnel1_
+interface Tunnel1
 
-_ip address 10.0.3.10 255.255.255.255_
+ip address 10.0.3.10 255.255.255.255
 
-_ip tcp adjust-mss 1350_
+ip tcp adjust-mss 1350
 
-_tunnel source 10.0.3.4_
+tunnel source 10.0.3.4
 
-_tunnel mode ipsec ipv4_
+tunnel mode ipsec ipv4
 
-_tunnel destination \&lt;VPNGWPublicIP\&gt;_
+tunnel destination <VPNGWPublicIP>
 
-_tunnel protection ipsec profile to-Azure-IPsecProfile_
+tunnel protection ipsec profile to-Azure-IPsecProfile
 
-_!_
+!
 
-_router bgp 65001_
+router bgp 65001
 
-_bgp router-id 192.168.1.1_
+bgp router-id 192.168.1.1
 
-_bgp log-neighbor-changes_
+bgp log-neighbor-changes
 
-_neighbor 10.0.2.254 remote-as 65600_
+neighbor 10.0.2.254 remote-as 65600
 
-_neighbor 10.0.2.254 ebgp-multihop 255_
+neighbor 10.0.2.254 ebgp-multihop 255
 
-_neighbor 10.0.2.254 update-source Loopback1_
+neighbor 10.0.2.254 update-source Loopback1
 
-_!_
+!
 
-_address-family ipv4_
+address-family ipv4
 
-_neighbor 10.0.2.254 activate_
+neighbor 10.0.2.254 activate
 
-_network 10.0.1.0 mask 255.255.255.0_
+network 10.0.1.0 mask 255.255.255.0
 
-_exit-address-family_
+exit-address-family
 
-_!_
+!
 
-_!Static route to Azure BGP peer IP_
+!Static route to Azure BGP peer IP
 
-_ip route 10.0.2.254 255.255.255.255 Tunnel1_
+ip route 10.0.2.254 255.255.255.255 Tunnel1
 
-_!Static route to internal workload subnet_
+!Static route to internal workload subnet
 
-_ip route 10.0.1.0 255.255.255.0 10.0.10.1_
+ip route 10.0.1.0 255.255.255.0 10.0.10.1
+```
 
-Type _Exit_ or hit CTRL+Z to exit configurator, then type
+Type "Exit" or "End" or simply hit CTRL+Z to exit configurator, then type
 
-_Wr_
+```
+Wr
+```
 
 Validate the status of the IKEv2 tunnel:
 
-_Show crypto ikev2 sa_
+```
+Show crypto ikev2 sa
+```
 
 ![](Images/ShoCryptoIkev2_1.jpg)
 
 Validate status of the IPSEC security associations
 
-_Show crypto ipsec sa_
+```
+Show crypto ipsec sa
+```
 
 ![](Images/ShoCryptoIpsec_1.jpg)
 
@@ -260,17 +270,23 @@ _Show crypto ipsec sa_
 
 Validate Tunnel interface status in general
 
-_Show int Tunnel1_
+```
+Show int Tunnel1
+```
 
 ![](Images/ShoIntTunnel.jpg)
 
 Now validate the status of BGP peering between VNET Gateway and CSR:
 
-_Show ip bgp summary_
+```
+Show ip bgp summary
+```
 
 ![](Images/ShoIPBGPSummary.jpg)
 
-_Show ip bgp_
+```
+Show ip bgp
+```
 
 ![](Images/ShoIPBGP.jpg)
 
@@ -280,37 +296,17 @@ Gateway is advertising 2 routes: a generic 10.0.0.0/16 one and the specific one 
 
 An integration with **Azure Route Server** in our emulated onprem environment would allow to avoid any static route configuration on that side, but this is out of scope here, so in order to create appropriate routing from the Onprem VM back to Azure we need to configure a UDR mapped to Onprem VM subnet:
 
-$RG = &quot;VPNGWNATRG&quot;
+```Powershell
+$RG = "VPNGWNATRG"
 
-$Location = &quot;West Europe&quot;
+$Location = "West Europe"
 
-$OnpremRT = New-AzRouteTable `
+$OnpremRT = New-AzRouteTable -Name 'OnpremRT' -ResourceGroupName $RG -location $Location
 
-  -Name &#39;OnpremRT&#39; `
+Get-AzRouteTable -ResourceGroupName $RG -Name 'OnpremRT'| Add-AzRouteConfig -Name "ToAzure" -AddressPrefix 100.0.0.0/16 -NextHopType "VirtualAppliance" -NextHopIpAddress 10.0.10.4 | Set-AzRouteTable
 
-  -ResourceGroupName $RG `
-
-  -location $Location
-
-  Get-AzRouteTable `
-
-  -ResourceGroupName $RG  `
-
-  -Name &#39;OnpremRT&#39; `
-
-  | Add-AzRouteConfig `
-
-  -Name &quot;ToAzure&quot; `
-
-  -AddressPrefix 100.0.0.0/16 `
-
-  -NextHopType &quot;VirtualAppliance&quot; `
-
-  -NextHopIpAddress 10.0.10.4 `
-
- | Set-AzRouteTable
-
-Get-AzVirtualNetwork -Name &#39;OnpremVNET&#39; -ResourceGroupName $RG | Set-azvirtualnetworksubnetConfig -Name &#39;Subnet1&#39; -AddressPrefix 10.0.1.0/24 -RouteTable $OnpremRT | set-AzVirtualNetwork
+Get-AzVirtualNetwork -Name 'OnpremVNET' -ResourceGroupName $RG | Set-azvirtualnetworksubnetConfig -Name 'Subnet1' -AddressPrefix 10.0.1.0/24 -RouteTable $OnpremRT | set-AzVirtualNetwork
+```
 
 Now check the IPSEC &amp; BGP connectivity status from VPN Gateway side:
 
@@ -339,15 +335,19 @@ Connect to both _AzureVM_ and _OnpremVM_ via SSH after a JIT request or NSG conf
 
 From AzureVM side, run:
 
-_Ping 100.0.2.4_
+```
+Ping 100.0.2.4
+```
 
 ![](Images/Ping100.0.2.4.jpg)
 
 From OnpremVM side, run:
 
-_Sudo tcpdump icmp -n_
+```
+Sudo tcpdump icmp -n
+```
 
-_ **Question:** _ What&#39;s the source IP generating ICMP requests seen by OnpremVM?
+**Question:** What's the source IP generating ICMP requests seen by OnpremVM?
 
 Now ping in the opposite direction, and check again which source IP is seen to generate traffic.
 
@@ -369,9 +369,10 @@ If Dynamic NAT is applied as EgressNAT, only Azure side will be able to initiate
 
 As first step we will disassociate existing EgressNAT rules from our connection:
 
-$RG = &quot;VPNGWNATRG&quot;
+```Powershell
+$RG = "VPNGWNATRG"
 
-$GWName = &quot;AzureGW&quot;
+$GWName = "AzureGW"
 
 $VPNGW = Get-AzVirtualNetworkGateway -Name $GWName -ResourceGroupName $RG
 
@@ -380,24 +381,29 @@ $connection = Get-AzVirtualNetworkGatewayConnection -Name Connection -ResourceGr
 $connection.EgressNatRules = $null
 
 Set-AzVirtualNetworkGatewayConnection -VirtualNetworkGatewayConnection $connection -Force
+```
 
 The StaticNAT rules will be kept in order to grant connectivity with the remote overlapping range, but the traffic from Azure side will be linked to a single /32 egressing address.
 
 We will now create an Egress Dynamic NAT rule linking traffic from Azure side to a single /32 egressing address, and associate it to our VPN Gateway:
 
+```Powershell
 $GWIPconfig= $VPNGW.IpConfigurations.id
 
-$Dynamicegressnatrule = New-AzVirtualNetworkGatewayNatRule -Name &quot;DynamicEgressRule&quot; -Type &quot;Dynamic&quot; -IpConfigurationId $GWIPconfig -Mode &quot;EgressSnat&quot; -InternalMapping @(&quot;10.0.1.0/24&quot;) -ExternalMapping @(&quot;100.0.1.15/32&quot;)
+$Dynamicegressnatrule = New-AzVirtualNetworkGatewayNatRule -Name "DynamicEgressRule" -Type "Dynamic" -IpConfigurationId $GWIPconfig -Mode "EgressSnat" -InternalMapping @("10.0.1.0/24") -ExternalMapping @("100.0.1.15/32")
 
 Set-AzVirtualNetworkGateway -VirtualNetworkGateway $VPNGW -NatRule $Dynamicegressnatrule -BgpRouteTranslationForNat $true
+```
 
 We will finally link the new NAT rule to the existing VPN connection:
 
-$Dynamicegressnatrule = Get-AzVirtualNetworkGatewayNatRule -ResourceGroupName $RG -Name &quot;DynamicEgressRule&quot; -ParentResourceName $GWName
+```Powershell
+$Dynamicegressnatrule = Get-AzVirtualNetworkGatewayNatRule -ResourceGroupName $RG -Name "DynamicEgressRule" -ParentResourceName $GWName
 
 $connection.EgressNatRules = $Dynamicegressnatrule
 
 Set-AzVirtualNetworkGatewayConnection -VirtualNetworkGatewayConnection $connection -Force
+```
 
 **Task2 – Test VMs connectivity**
 
@@ -405,29 +411,33 @@ Connect to both _AzureVM_ and _OnpremVM_ via SSH after a JIT request or NSG conf
 
 From AzureVM side, run:
 
-_Ping 100.0.2.4_
+```
+Ping 100.0.2.4
+```
 
 ![](Images/Ping100.0.2.4_2.jpg)
 
 From OnpremVM side, run:
 
-_Sudo tcpdump icmp -n_
+```
+Sudo tcpdump icmp -n
+```
 
-**Question:** What&#39;s the source IP generating ICMP requests seen by OnpremVM?
+**Question:** What's the source IP generating ICMP requests seen by OnpremVM?
 
 **Task3 – Test traffic from another source VM**
 
 We will now proceed generating traffic toward same destination (OnpremVM) but from a different Azure resource.
 
-Let&#39;s deploy a new Azure linux VM in the same subnet used for AzureVM:
+Let's deploy a new Azure linux VM in the same subnet used for AzureVM:
 
-_XXXXXX_
+```
 
-_Instructions for GitHub deployment_
+Instructions for GitHub deployment
 
-_Launch DeployVM.tf_
+Launch DeployVM.tf
 
-_XXXXXX_
+```
 
 Configure JIT on the new VM (AzureVM2) and connect to it.
 
@@ -435,7 +445,9 @@ Configure JIT on the new VM (AzureVM2) and connect to it.
 
 Now run:
 
-_Ping 100.0.2.4_
+```
+Ping 100.0.2.4
+```
 
 Connect back to OnpremVM (make sure that TCPDUMP is still running on it, and that PING is still running as well from AzureVM)
 
@@ -443,7 +455,7 @@ Connect back to OnpremVM (make sure that TCPDUMP is still running on it, and tha
 
 **Challenge 3: NAT rules impact on BGP advertisements**
 
-As we&#39;ve seen in Challenge1, Azure VPN Gateway is basically dropping any routes advertised by remote branch, if overlapping exists between the InternalMapping of the relevant IngressNAT rules and the what is advertised.
+As we've seen in Challenge1, Azure VPN Gateway is basically dropping any routes advertised by remote branch, if overlapping exists between the InternalMapping of the relevant IngressNAT rules and the what is advertised.
 
 Goal of the next challenge will be to evaluate the impact of advertisement of BGP ranges which are not overlapping with NAT rules mappings, and to demonstrate how the whole routing is not impacted by NAT rules associated with a connection, in the case when the connection is used for traffic between non-overlapping resources.
 
@@ -457,61 +469,68 @@ The goal will be to connect AzureVM with OnpremVM2
 
 ![](Images/Lab3.jpg)
 
-Let&#39;s start adding an extra address space to our onprem network:
+Let's start adding an extra address space to our onprem network:
 
-$RG=&quot;VPNGWNATRG&quot;
+```Powershell
+$RG="VPNGWNATRG"
 
-$Location=&quot;West Europe&quot;
+$Location="West Europe"
 
 $VNET=Get-AzVirtualNetwork-NameOnpremVNET-ResourceGroupName$RG
 
-$VNET.AddressSpace.AddressPrefixes.Add(&quot;192.168.25.0/24&quot;)
+$VNET.AddressSpace.AddressPrefixes.Add("192.168.25.0/24")
 
 Set-AzVirtualNetwork-VirtualNetwork$VNET
+```
 
-Let&#39;s then proceed with the creation of an extra subnet (and relevant NSG) in this new address range + a VM:
+Let's then proceed with the creation of an extra subnet (and relevant NSG) in this new address range + a VM:
 
-_XXXXXX_
+```
 
-_Instructions for GitHub deployment_
+Instructions for GitHub deployment
 
-_Challenge3.tf_
+Challenge3.tf
 
-_XXXXXX_
+```
 
 Now we associate to the new Subnet2 the same UDR as Subnet1, for static redirection of AzureVNET traffic via IPSEC tunnel
 
-$RG=&quot;VPNGWNATRG&quot;
-
-$Location=&quot;West Europe&quot;
-
-$OnpremRT=Get-AzRouteTable-ResourceGroupName$RG-NameOnpremRT
-
-Get-AzVirtualNetwork-Name&#39;OnpremVNET&#39;-ResourceGroupName$RG|Set-azvirtualnetworksubnetConfig-Name&#39;Subnet2&#39;-AddressPrefix192.168.25.0/24-RouteTable$OnpremRT|set-AzVirtualNetwork
+```Powershell
+$RG="VPNGWNATRG"
+$Location="West Europe"
+$OnpremRT=Get-AzRouteTable-ResourceGroupName $RG-Name OnpremRT
+Get-AzVirtualNetwork-Name 'OnpremVNET' -ResourceGroupName$RG|Set-azvirtualnetworksubnetConfig-Name 'Subnet2'-AddressPrefix192.168.25.0/24-RouteTable $OnpremRT|set-AzVirtualNetwork
+```
 
 **Task2 – Configuration of the CSR BGP advertisement**
 
 Now we need to make sure CSR starts advertising the new non-overlapping range to Azure VPN gateway.
 
-To do so, let&#39;s connect to CSR and run:
+To do so, let's connect back to CSR and run:
 
-_Conf t_
+```
+Conf t
+```
 
 Then:
 
-_router bgp 65001_
+```
+router bgp 65001
 
-_address-family ipv4_
+address-family ipv4
 
-_network 192.168.25.0 mask 255.255.255.0_
+network 192.168.25.0 mask 255.255.255.0
 
-_exit-address-family_
+exit-address-family
 
-_ip route 192.168.25.0 255.255.255.0 10.0.10.1_
+ip route 192.168.25.0 255.255.255.0 10.0.10.1
+```
 
 Check the new advertised routes from CSR side:
 
+```
 sh bgp neighbors 10.0.2.254 advertised-routes
+```
 
 ![](Images/ShoBGPNeig10.0.2.254.jpg)
 
@@ -521,25 +540,29 @@ Check that the new route is effectively seen at VPN gateway side:
 
 No NAT implemented for such route, as expected.
 
-In the NIC effective routes of VM &quot;AzureVM&quot; and &quot;AzureVM2&quot; we can now see Azure VPN Gateway set as nexthop for the considered network range:
+In the NIC effective routes of VM "AzureVM"and ";AzureVM2" we can now see Azure VPN Gateway set as nexthop for the considered network range:
 
 ![](Images/AzurePortal_NICEffectiveRoutes.jpg)
 
 **Task3 – Validate connectivity**
 
-Let&#39;s finally proceed validating the effective connectivity between AzureVM and OnpremVM2 over a non-NATted destination IP range.
+Let's finally proceed validating the effective connectivity between AzureVM and OnpremVM2 over a non-NATted destination IP range.
 
 Connect via SSH to both AzureVM and OnpremVM2 (configure JIT access or NSG security rules if needed).
 
 From AzureVM, start a PING toward OnpremVM2:
 
-_Ping 192.168.25.4_
+```
+Ping 192.168.25.4
+```
 
 ![](Images/Ping192.168.25.4.jpg)
 
 From OnpremVM2, run:
 
-_Sudo tcpdump -n icmp_
+```
+Sudo tcpdump -n icmp
+```
 
 **Question:** Which source IP is seen by OnpremVM2 for this ICMP traffic?
 
