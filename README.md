@@ -99,9 +99,9 @@ New-AzVirtualNetworkGatewayConnection -Name Connection -ResourceGroupName $RG -L
 
 Acquire JIT access to your Cisco CSR deployment – if needed – or create dedicated security rules in the NSG bound to the external subnet of the CSR (CSRExternalSubnet) to grant SSH connectivity from your public IP.
 
-    admin\_username =&quot;LabAdmin&quot;
+    admin_username = &quot;LabAdmin&quot;
 
-    admin\_password =&quot;VPNGWNAT!&quot;
+    admin_password = &quot;VPNGWNAT!&quot;
 
 SSH to the CSR:
 
