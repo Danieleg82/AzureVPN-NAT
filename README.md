@@ -237,37 +237,37 @@ Validate the status of the IKEv2 tunnel:
 
 _Show crypto ikev2 sa_
 
-![](RackMultipart20220324-4-60kjve_html_94c395b734278b08.png)
+![](Images/ShoCryptoIkev2_1.jpg)
 
 Validate status of the IPSEC security associations
 
 _Show crypto ipsec sa_
 
-![](RackMultipart20220324-4-60kjve_html_7e3b34ef92e1a2e0.png)
+![](Images/ShoCryptoIpsec_1.jpg)
 
-![](RackMultipart20220324-4-60kjve_html_37fa87c8cab287c0.png)
+![](Images/ShoCryptoIpsec_2.jpg)
 
-![](RackMultipart20220324-4-60kjve_html_6d67700f23ab04f9.png)
+![](Images/ShoCryptoIpsec_3.jpg)
 
 Validate Tunnel interface status in general
 
 _Show int Tunnel1_
 
-![](RackMultipart20220324-4-60kjve_html_a9ac4f8d5ac8343.png)
+![](Images/ShoIntTunnel.jpg)
 
 Now validate the status of BGP peering between VNET Gateway and CSR:
 
 _Show ip bgp summary_
 
-![](RackMultipart20220324-4-60kjve_html_a657cd739b58945c.png)
+![](Images/ShoIPBGPSummary.jpg)
 
 _Show ip bgp_
 
-![](RackMultipart20220324-4-60kjve_html_fbcee295c06758c2.png)
+![](Images/ShoIPBGP.jpg)
 
 Note the routes CSR is receiving from VNET Gateway:
 
-Gateway is advertising 2 routes  a generic 10.0.0.0/16 one and the specific one related with our EgressNAT range (100.0.1.0/24)
+Gateway is advertising 2 routes: a generic 10.0.0.0/16 one and the specific one related with our EgressNAT range (100.0.1.0/24)
 
 An integration with **Azure Route Server** in our emulated onprem environment would allow to avoid any static route configuration on that side, but this is out of scope here, so in order to create appropriate routing from the Onprem VM back to Azure we need to configure a UDR mapped to Onprem VM subnet:
 
@@ -305,9 +305,9 @@ Get-AzVirtualNetwork -Name &#39;OnpremVNET&#39; -ResourceGroupName $RG | Set-azv
 
 Now check the IPSEC &amp; BGP connectivity status from VPN Gateway side:
 
-![](RackMultipart20220324-4-60kjve_html_163c12f927fe790e.png)
+![](Images/AzurePortal_connectionConnected.jpg)
 
-![](RackMultipart20220324-4-60kjve_html_cb6392e574d37c83.png)
+![](Images/AzurePortal_ReceivedRoutes.jpg)
 
 Note how VPN Gateway is ignoring the route received from CSR since it&#39;s already covered by its own internal network-rule for the NATted range 100.0.2.0/24
 
@@ -332,7 +332,7 @@ From AzureVM side, run:
 
 _Ping 100.0.2.4_
 
-![](RackMultipart20220324-4-60kjve_html_14763b059725400.png)
+![](Images/Ping100.0.2.4.jpg)
 
 From OnpremVM side, run:
 
@@ -398,7 +398,7 @@ From AzureVM side, run:
 
 _Ping 100.0.2.4_
 
-![](RackMultipart20220324-4-60kjve_html_4bf0bd4805de0597.png)
+![](Images/Ping100.0.2.4_2.jpg)
 
 From OnpremVM side, run:
 
@@ -422,7 +422,7 @@ _XXXXXX_
 
 Configure JIT on the new VM (AzureVM2) and connect to it.
 
-![](RackMultipart20220324-4-60kjve_html_e3614ca9647243db.png)
+![](Images/Lab2.jpg)
 
 Now run:
 
@@ -446,7 +446,7 @@ We will add a new address-space to the Onprem VNET and we&#39;ll create a subnet
 
 The goal will be to connect AzureVM with OnpremVM2
 
-![](RackMultipart20220324-4-60kjve_html_43889ac59ebb4dfa.png)
+![](Images/Lab3.jpg)
 
 Let&#39;s start adding an extra address space to our onprem network:
 
@@ -504,17 +504,17 @@ Check the new advertised routes from CSR side:
 
 sh bgp neighbors 10.0.2.254 advertised-routes
 
-![](RackMultipart20220324-4-60kjve_html_59b3a8c0d1c98c26.png)
+![](Images/ShoBGPNeig10.0.2.254.jpg)
 
 Check that the new route is effectively seen at VPN gateway side:
 
-![](RackMultipart20220324-4-60kjve_html_af835b65df21869b.png)
+![](Images/AzurePortal_ReceivedRoutes_2.jpg)
 
 No NAT implemented for such route, as expected.
 
 In the NIC effective routes of VM &quot;AzureVM&quot; and &quot;AzureVM2&quot; we can now see Azure VPN Gateway set as nexthop for the considered network range:
 
-![](RackMultipart20220324-4-60kjve_html_26241da35a7fe9fd.png)
+![](Images/AzurePortal_NICEffectiveRoutes.jpg)
 
 **Task3 – Validate connectivity**
 
@@ -526,7 +526,7 @@ From AzureVM, start a PING toward OnpremVM2:
 
 _Ping 192.168.25.4_
 
-![](RackMultipart20220324-4-60kjve_html_81c76dcb70a7b0fc.png)
+![](Images/Ping192.168.25.4.jpg)
 
 From OnpremVM2, run:
 
