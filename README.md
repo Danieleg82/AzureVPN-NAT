@@ -38,13 +38,15 @@ The Onprem-side traffic will be seen by Azure as originated from network range 1
 
 To create the basic environment, please run the following terraform deployment script:
 
-_XXXXXX_
+
+<span style="background-color:Black">_XXXXXX_</span>
 
 _Instructions for GitHub deployment_
 
 _Launch Main.tf_
 
 _XXXXXX_
+    
 
 This will take around 20 minutes to complete to accommodate the time to deploy VNET Gateway
 
