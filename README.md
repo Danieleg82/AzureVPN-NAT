@@ -69,7 +69,7 @@ terraform apply
 
 This will take around 20 minutes to complete to accommodate the time to deploy VNET Gateway
 
-As soon as it&#39;s completed, you will be in the following conditions:
+As soon as it's completed, you will be in the following conditions:
 
 - An Azure VNET with a VNET-Gateway installed but not configured with any connection or NAT rule
 - An Onprem site (emulated with a VNET with overlapping IP space) with a Cisco CSR router deployed but not configured
@@ -77,6 +77,13 @@ As soon as it&#39;s completed, you will be in the following conditions:
 - NSGs deployed to core subnets on both sides, and already pre-configured with the needed security rules for granting final connectivity purposes
 
 _Note:_ For accessing the CSR and the VMs you will need to configure JIT access at VM level (the VMs have a public IP mapped, the JIT request will provide accessibility over SSH to the deployments)
+
+Any VM in this lab will have the following access credentials configured:
+
+```
+    admin_username = AdminUser
+    admin_password = MyVPNGWNAT_Lab!
+```
 
 Next steps after deployment will be to
 
@@ -119,9 +126,6 @@ New-AzVirtualNetworkGatewayConnection -Name Connection -ResourceGroupName $RG -L
 **TASK 3 – Configure Cisco and UDRs**
 
 Acquire JIT access to your Cisco CSR deployment – if needed – or create dedicated security rules in the NSG bound to the external subnet of the CSR (CSRExternalSubnet) to grant SSH connectivity from your public IP.
-
-    admin_username = AdminUser
-    admin_password = MyVPNGWNAT_Lab!
 
 SSH to the CSR
 
@@ -267,7 +271,7 @@ Now check the IPSEC &amp; BGP connectivity status from VPN Gateway side:
 
 ![](Images/AzurePortal_ReceivedRoutes.jpg)
 
-Note how VPN Gateway is ignoring the route received from CSR since it&#39;s already covered by its own internal network-rule for the NATted range 100.0.2.0/24
+Note how VPN Gateway is ignoring the route received from CSR since it's already covered by its own internal network-rule for the NATted range 100.0.2.0/24
 
 Any IP range advertised by a remote branch which is overlapping with IngressNAT rules&#39; InternalMapping will be dropped by GW, which will leverage static Network routes configured via NAT.
 
@@ -286,10 +290,6 @@ BGP peer IP address consideration for a NAT&#39;ed on-premises network:
 
 Connect to both _AzureVM_ and _OnpremVM_ via SSH after a JIT request or NSG configuration.
 
-```
-Username: AdminUser
-Pswd: MyVPNGWNAT_Lab!
-```
 From AzureVM side, run:
 
 ```
