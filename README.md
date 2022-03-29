@@ -54,7 +54,7 @@ az account set --subscription <Name or ID of subscription>
 -Clone the GitHub repository:
 
 ```
-git clone https://github.com/mddazure/azure-vwan-microhack
+git clone https://github.com/Danieleg82/AzureVPN-NAT
 ```
 
 -Change directory:
