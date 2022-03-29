@@ -433,11 +433,11 @@ The goal will be to connect AzureVM with OnpremVM2
 Let's start adding an extra address space to our onprem network:
 
 ```Powershell
-$RG="VPNGWNATRG"
-$Location="West Europe"
-$VNET=Get-AzVirtualNetwork-Name OnpremVNET-ResourceGroupName $RG
+$RG= "VPNGWNATRG"
+$Location= "West Europe"
+$VNET=Get-AzVirtualNetwork -Name OnpremVNET -ResourceGroupName $RG
 $VNET.AddressSpace.AddressPrefixes.Add("192.168.25.0/24")
-Set-AzVirtualNetwork-VirtualNetwork $VNET
+Set-AzVirtualNetwork -VirtualNetwork $VNET
 ```
 
 Let's then proceed with the creation of an extra subnet (and relevant NSG) in this new address range + a VM:
@@ -466,8 +466,8 @@ Now we associate to the new Subnet2 the same UDR as Subnet1, for static redirect
 ```Powershell
 $RG="VPNGWNATRG"
 $Location="West Europe"
-$OnpremRT=Get-AzRouteTable-ResourceGroupName $RG-Name OnpremRT
-Get-AzVirtualNetwork-Name 'OnpremVNET' -ResourceGroupName$RG|Set-azvirtualnetworksubnetConfig-Name 'Subnet2'-AddressPrefix192.168.25.0/24-RouteTable $OnpremRT|set-AzVirtualNetwork
+$OnpremRT=Get-AzRouteTable -ResourceGroupName $RG-Name OnpremRT
+Get-AzVirtualNetwork -Name 'OnpremVNET' -ResourceGroupName $RG|Set-azvirtualnetworksubnetConfig -Name 'Subnet2'-AddressPrefix 192.168.25.0/24 -RouteTable $OnpremRT|set-AzVirtualNetwork
 ```
 
 **Task2 – Configuration of the CSR BGP advertisement**
