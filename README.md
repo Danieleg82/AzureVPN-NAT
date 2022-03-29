@@ -377,15 +377,28 @@ Sudo tcpdump icmp -n
 
 We will now proceed generating traffic toward same destination (OnpremVM) but from a different Azure resource.
 
-Let's deploy a new Azure linux VM in the same subnet used for AzureVM:
+Let's deploy a new Azure linux VM in the same subnet used for AzureVM.
+
+From Cloudshell, enter in the DeployVM module
 
 ```
-
-Instructions for GitHub deployment
-
-Launch DeployVM.tf
+cd ./AzureVPN-NAT/DeployVM
+```
+Run:
 
 ```
+Terraform Init
+```
+
+and start deployment:
+
+```
+Terraform apply
+```
+
+Enter YES when prompted.
+
+Wait until completion of new VM deployment.
 
 Configure JIT on the new VM (AzureVM2) and connect to it.
 
