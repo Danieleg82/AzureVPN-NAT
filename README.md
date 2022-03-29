@@ -48,6 +48,12 @@ az upgrade --yes
 -If necessary select your target subscription:
 
 ```
+az account set --subscription <Name or ID of subscription>
+```
+
+-Clone the GitHub repository:
+
+```
 git clone https://github.com/mddazure/azure-vwan-microhack
 ```
 
@@ -62,7 +68,9 @@ cd ./AzureVPN-NAT/Main
 ```
 terraform init
 ```
+
 -Now start the deployment (when prompted, confirm with yes to start the deployment):
+
 ```
 terraform apply
 ```
