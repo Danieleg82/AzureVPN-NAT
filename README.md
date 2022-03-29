@@ -36,14 +36,35 @@ The Onprem-side traffic will be seen by Azure as originated from network range 1
 
 **TASK 1 – Create the basic environment**
 
-To create the basic environment, please run the following terraform deployment script:
+To create the basic environment, please follow these instructions.
+
+-Log in to Azure Cloud Shell at https://shell.azure.com/ and select Bash
+
+-Ensure Azure CLI and extensions are up to date:
 
 ```
+az upgrade --yes
+```
+-If necessary select your target subscription:
 
-Instructions for GitHub deployment
+```
+git clone https://github.com/mddazure/azure-vwan-microhack
+```
 
-Launch Main.tf
+-Change directory:
 
+```
+cd ./AzureVPN-NAT/Main
+```
+
+-Initialize terraform and download the azurerm resource provider:
+
+```
+terraform init
+```
+-Now start the deployment (when prompted, confirm with yes to start the deployment):
+```
+terraform apply
 ```
 
 This will take around 20 minutes to complete to accommodate the time to deploy VNET Gateway
