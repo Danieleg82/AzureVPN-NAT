@@ -435,9 +435,9 @@ Let's start adding an extra address space to our onprem network:
 ```Powershell
 $RG="VPNGWNATRG"
 $Location="West Europe"
-$VNET=Get-AzVirtualNetwork-NameOnpremVNET-ResourceGroupName$RG
+$VNET=Get-AzVirtualNetwork-Name OnpremVNET-ResourceGroupName $RG
 $VNET.AddressSpace.AddressPrefixes.Add("192.168.25.0/24")
-Set-AzVirtualNetwork-VirtualNetwork$VNET
+Set-AzVirtualNetwork-VirtualNetwork $VNET
 ```
 
 Let's then proceed with the creation of an extra subnet (and relevant NSG) in this new address range + a VM:
