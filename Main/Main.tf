@@ -88,8 +88,8 @@ resource "azurerm_linux_virtual_machine" "AzureVM" {
   resource_group_name = azurerm_resource_group.RG.name
   location            = azurerm_resource_group.RG.location
   size                = "Standard_B2s"
-  admin_username      = "adminuser"
-  admin_password      = "Danny_lab_82"
+  admin_username      = "AdminUser"
+  admin_password      = "MyVPNGWNAT_Lab!"
   disable_password_authentication = false
   network_interface_ids = [
     azurerm_network_interface.AzureVMNic.id,
@@ -211,8 +211,8 @@ resource "azurerm_linux_virtual_machine" "OnpremVM" {
   resource_group_name = azurerm_resource_group.RG.name
   location            = azurerm_resource_group.RG.location
   size                = "Standard_B2s"
-  admin_username      = "adminuser"
-  admin_password      = "Danny_lab_82"
+  admin_username      = "AdminUser"
+  admin_password      = "MyVPNGWNAT_Lab!"
   disable_password_authentication = false
   network_interface_ids = [
     azurerm_network_interface.OnpremVMNic.id,
@@ -293,8 +293,8 @@ resource "azurerm_virtual_machine" "OnpremCSR" {
     version   = "17.2.120200508"
   }
   os_profile {
-    admin_username = "danny"
-    admin_password = "Danny_lab_82"
+    admin_username = "AdminUser"
+    admin_password = "MyVPNGWNAT_Lab!"
     computer_name  = "CSR0"
   }
 }
