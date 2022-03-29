@@ -466,7 +466,7 @@ Now we associate to the new Subnet2 the same UDR as Subnet1, for static redirect
 ```Powershell
 $RG="VPNGWNATRG"
 $Location="West Europe"
-$OnpremRT=Get-AzRouteTable -ResourceGroupName $RG-Name OnpremRT
+$OnpremRT=Get-AzRouteTable -ResourceGroupName $RG -Name OnpremRT
 Get-AzVirtualNetwork -Name 'OnpremVNET' -ResourceGroupName $RG|Set-azvirtualnetworksubnetConfig -Name 'Subnet2'-AddressPrefix 192.168.25.0/24 -RouteTable $OnpremRT|set-AzVirtualNetwork
 ```
 
