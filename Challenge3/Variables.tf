@@ -1,5 +1,5 @@
 variable "resource_group_name" {
-  default       = "VPNGWNATRG"
+  default       = "VPNNAT"
 }
 
 variable "resource_group_location" {
