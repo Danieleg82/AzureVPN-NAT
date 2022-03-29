@@ -286,9 +286,10 @@ BGP peer IP address consideration for a NAT&#39;ed on-premises network:
 
 Connect to both _AzureVM_ and _OnpremVM_ via SSH after a JIT request or NSG configuration.
 
+```
 Username: AdminUser
 Pswd: MyVPNGWNAT_Lab!
-
+```
 From AzureVM side, run:
 
 ```
