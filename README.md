@@ -442,13 +442,24 @@ Set-AzVirtualNetwork-VirtualNetwork$VNET
 
 Let's then proceed with the creation of an extra subnet (and relevant NSG) in this new address range + a VM:
 
-```
-
-Instructions for GitHub deployment
-
-Challenge3.tf
+In CloudShell, enter in the Challenge3 module:
 
 ```
+cd ./AzureVPN-NAT/Challenge3
+```
+Run:
+
+```
+Terraform Init
+```
+
+and start deployment:
+
+```
+Terraform apply
+```
+
+Type YES when prompted.
 
 Now we associate to the new Subnet2 the same UDR as Subnet1, for static redirection of AzureVNET traffic via IPSEC tunnel
 
