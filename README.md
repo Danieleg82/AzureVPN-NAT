@@ -6,9 +6,9 @@ Table of contents
 
  [Challenge 1: Build VPN tunnel and apply Static NAT rules](#challenge-1-build-vpn-tunnel-and-apply-static-nat-rules)
 
- Challenge 2: Convert to Dynamic NAT rules to the connection
+ [Challenge 2: Convert to Dynamic NAT rules to the connection](#challenge-2-convert-to-dynamic-nat-rules-to-the-connection)
 
- Challenge 3: NAT rules impact on BGP advertisements
+ [Challenge 3: NAT rules impact on BGP advertisements](#challenge-3-nat-rules-impact-on-bgp-advertisements)
 
 # **Introduction**
 
