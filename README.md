@@ -6,7 +6,7 @@ Table of contents
 
  [Challenge 1: Build VPN tunnel and apply Static NAT rules](#challenge-1-build-vpn-tunnel-and-apply-static-nat-rules)
 
- [Challenge 2: Convert to Dynamic NAT rules to the connection](#challenge-2-convert-to-dynamic-nat-rules-to-the-connection)
+ [Challenge 2: Convert to Dynamic NAT rules](#challenge-2-convert-to-dynamic-nat-rules)
 
  [Challenge 3: NAT rules impact on BGP advertisements](#challenge-3-nat-rules-impact-on-bgp-advertisements)
 
@@ -318,7 +318,7 @@ Sudo tcpdump icmp -n
 
 Now ping in the opposite direction, and check again which source IP is seen to generate traffic.
 
-# **Challenge 2: Convert to Dynamic NAT rules to the connection**
+# **Challenge 2: Convert to Dynamic NAT rules**
 
 When using **Dynamic NAT rules**, an IP address can be translated to different target IP addresses and TCP/UDP port based on availability, or with a different combination of IP address and TCP/UDP port. The latter is also called NAPT, Network Address and Port Translation.
 
