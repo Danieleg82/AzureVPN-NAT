@@ -30,6 +30,8 @@ A second VNET will be the real Azure environment, hosting our VPN Gateway soluti
 
 We will build an IPSEC tunnel between the environments, with BGP enabled, we will configure **Static** NAT rules on our VPN Gateway, and we will create a successful communication between 2 VMs with same private IP over the tunnel.
 
+Definition of **Static NAT**: Static rules define a fixed address mapping relationship. For a given IP address, it will be mapped to the **same address from the target pool**. The mappings for static rules are stateless because the mapping is fixed.
+
 The Azure-side traffic will be seen by onprem as originated from network range 100.0.1.0/24
 
 The Onprem-side traffic will be seen by Azure as originated from network range 100.0.2.0/24
