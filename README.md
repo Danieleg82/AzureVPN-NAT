@@ -324,7 +324,12 @@ When using **Dynamic NAT rules**, an IP address can be translated to different t
 
 Dynamic rules will result in stateful translation mappings depending on the traffic flows at any given time. Due to the nature of Dynamic NAT and the ever changing IP/Port combinations, flows that make use of Dynamic NAT rules have to be initiated from the  **InternalMapping**  (Pre-NAT) IP Range. The dynamic mapping is released once the flow is disconnected or gracefully terminated.
 
-If the target address pool size is the same as the original address pool, use static NAT rule to define a 1:1 mapping in a sequential order. If the target address pool is smaller than the original address pool, use dynamic NAT rule to accommodate the differences.
+====================================================================================================================================================================
+
+**GOLDEN RULE:**
+_If the target address pool size is the same as the original address pool, **use static NAT rule** to define a 1:1 mapping in a sequential order. If the target address pool is smaller than the original address pool, **use dynamic NAT rule** to accommodate the differences._
+
+====================================================================================================================================================================
 
 In this challenge we will modify the VPN NAT rule approach to use Dynamic NAT in the direction from Azure to Onprem (EgressNAT).
 
@@ -542,4 +547,4 @@ Sudo tcpdump -n icmp
 
 **CONCLUSIONS:**
 
-Whit this microhack I wanted to show the potential of Azure VPN Gateway&#39;s Static and Dynamic NAT rules, and how they can be leveraged in the ever-green scenario of overlapping network ranges between Azure virtual networks and VPN-connected branches.
+Azure VPN Gateway's NAT rules represent an important milestone in making Azure cloud-native VPN solution more complete and competitive when compared to the market of 3rd party NVA appliances, and allow the implementation of Azure-based workloads in scenarios where private IP addresses overlapping with branches cannot be avoided, which is still today a big challenge for network administrators.
