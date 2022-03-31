@@ -16,7 +16,7 @@ Azure VPN NAT (Network Address Translation) supports overlapping address spaces 
 
 In this MicroHack we will explore the Azure VPN NAT features in its most common scenario, so when Azure VNET address ranges overlap with onprem-connected network segments.
 
-We will cover the differences between Static and Dynamic NAT modes with relevant benefits and limitations, including the possible network configurations for HUB&amp;Spoke topologies for diversified NAT approaches.
+We will cover the differences between Static and Dynamic NAT modes with relevant benefits, limitations and impact on routing.
 
 # **Challenge 1: Build VPN tunnel and apply Static NAT rules**
 
