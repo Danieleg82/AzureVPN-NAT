@@ -519,7 +519,7 @@ Check that the new route is effectively seen at VPN gateway side:
 
 No NAT implemented for such route, as expected.
 
-In the NIC effective routes of VM "AzureVM"and ";AzureVM2" we can now see Azure VPN Gateway set as nexthop for the considered network range:
+In the NIC effective routes of VM "AzureVM"and "AzureVM2" we can now see Azure VPN Gateway set as nexthop for the considered network range:
 
 ![](Images/AzurePortal_NICEffectiveRoutes.jpg)
 
