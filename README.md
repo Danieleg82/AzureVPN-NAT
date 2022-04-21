@@ -548,3 +548,11 @@ Sudo tcpdump -n icmp
 **CONCLUSIONS:**
 
 Azure VPN Gateway's NAT rules represent an important milestone in making Azure cloud-native VPN solution more complete and competitive when compared to the market of 3rd party NVA appliances, and allow the implementation of Azure-based workloads in scenarios where private IP addresses overlapping with branches cannot be avoided, which is still today a big challenge for network administrators.
+
+The possibility to choose between Static and Dynamic mapping allows more flexibility in the management of the IP addressing and the automatic management of BGP routes translation allows to fully integrate the solution with dynamic routing approaches.
+
+I really hope that this MicroHack can help you improving your understanding of the feature and its implementation methods.
+
+Thanks all :)
+
+Daniele
