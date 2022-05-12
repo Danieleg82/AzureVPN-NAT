@@ -122,7 +122,7 @@ _NAT rules_
 ```Powershell
 $VPNGW = Get-AzVirtualNetworkGateway -Name $GWName -ResourceGroupName $RG
 $egressnatrule = New-AzVirtualNetworkGatewayNatRule -Name "EgressRule" -Type "Static" -Mode "EgressSnat" -InternalMapping @("10.0.1.0/24") -ExternalMapping @("100.0.1.0/24")
-$ingressnatrule = New-AzVirtualNetworkGatewayNatRule -Name "IngressRule" -Type "Static" -Mode "IngressSnat" -InternalMapping @("10.0.1.0/24") -ExternalMapping @(";100.0.2.0/24")
+$ingressnatrule = New-AzVirtualNetworkGatewayNatRule -Name "IngressRule" -Type "Static" -Mode "IngressSnat" -InternalMapping @("10.0.1.0/24") -ExternalMapping @("100.0.2.0/24")
 Set-AzVirtualNetworkGateway -VirtualNetworkGateway $VPNGW -NatRule $ingressnatrule,$egressnatrule -BgpRouteTranslationForNat $true
 
 ```
