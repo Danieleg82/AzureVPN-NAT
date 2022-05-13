@@ -50,7 +50,7 @@ az upgrade --yes
 -If necessary select your target subscription:
 
 ```
-az account set --subscription <Name or ID of subscription>
+Set-AzContext -Subscription "xxxx-xxxx-xxxx-xxxx"
 ```
 
 -Clone the GitHub repository:
