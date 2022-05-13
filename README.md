@@ -216,7 +216,7 @@ ip route 10.0.1.0 255.255.255.0 10.0.10.1
 Type "Exit" or "End" or simply hit CTRL+Z to exit configurator, then type
 
 ```
-W
+Wr
 ```
 
 Validate the status of the IKEv2 tunnel:
