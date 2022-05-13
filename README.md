@@ -40,13 +40,8 @@ The Onprem-side traffic will be seen by Azure as originated from network range 1
 
 To create the basic environment, please follow these instructions.
 
--Log in to Azure Cloud Shell at https://shell.azure.com/ and select Bash
+-Log in to Azure Cloud Shell at https://shell.azure.com/ and select Powershell
 
--Ensure Azure CLI and extensions are up to date:
-
-```
-az upgrade --yes
-```
 -If necessary select your target subscription:
 
 ```
