@@ -51,15 +51,6 @@ resource "azurerm_subnet" "GWSubnet" {
   address_prefixes     = ["10.0.2.0/24"]
 }
 
-#Create AzureVM public IP
-resource "azurerm_public_ip" "AzureVMPublicIP" {
-  name                = "AzurePublicIP"
-  resource_group_name = azurerm_resource_group.RG.name
-  location            = azurerm_resource_group.RG.location
-  allocation_method   = "Static"
-
-}
-
 #Create Azure gateway VIP
 resource "azurerm_public_ip" "AzureGWVIP" {
   name                = "AzureGWVIP"
@@ -78,7 +69,6 @@ resource "azurerm_network_interface" "AzureVMNic" {
     name                          = "internal"
     subnet_id                     = azurerm_subnet.AzureVMSubnet.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id = azurerm_public_ip.AzureVMPublicIP.id
   }
 }
 
@@ -131,6 +121,76 @@ resource "azurerm_virtual_network_gateway" "AzureGW" {
 }
 
 ###################################################################################
+#Create Bastion for AzureVNET environment
+###################################################################################
+
+resource "azurerm_virtual_network" "BastionForAzureVNET" {
+  name                = "BastionForAzureVNET"
+  address_space       = ["192.168.170.0/24"]
+  location            = azurerm_resource_group.RG.location
+  resource_group_name = azurerm_resource_group.RG.name
+}
+
+resource "azurerm_subnet" "BastionAzSubnet" {
+  name                 = "AzureBastionSubnet"
+  resource_group_name  = azurerm_resource_group.RG.name
+  virtual_network_name = azurerm_virtual_network.AZUREVNET.name
+  address_prefixes     = ["10.0.35.0/27"]
+}
+
+resource "azurerm_public_ip" "BastionAzVIP" {
+  name                = "BastionAzVIP"
+  location            = azurerm_resource_group.RG.location
+  resource_group_name = azurerm_resource_group.RG.name
+  allocation_method   = "Static"
+  sku                 = "Standard"
+}
+
+resource "azurerm_bastion_host" "BastionAZ" {
+  name                = "BastionAZ"
+  location            = azurerm_resource_group.RG.location
+  resource_group_name = azurerm_resource_group.RG.name
+
+  ip_configuration {
+    name                 = "configuration"
+    subnet_id            = azurerm_subnet.BastionAzSubnet.id
+    public_ip_address_id = azurerm_public_ip.BastionAzVIP.id
+  }
+}
+
+###################################################################################
+#Create Bastion for Onprem environment
+###################################################################################
+
+resource "azurerm_subnet" "BastionOnprSubnet" {
+  name                 = "AzureBastionSubnet"
+  resource_group_name  = azurerm_resource_group.RG.name
+  virtual_network_name = azurerm_virtual_network.OnpremVNET.name
+  address_prefixes     = ["10.0.35.0/27"]
+}
+
+resource "azurerm_public_ip" "BastionOnprVIP" {
+  name                = "BastionOnprVIP"
+  location            = azurerm_resource_group.RG.location
+  resource_group_name = azurerm_resource_group.RG.name
+  allocation_method   = "Static"
+  sku                 = "Standard"
+}
+
+resource "azurerm_bastion_host" "BastionOnpr" {
+  name                = "BastionOnpr"
+  location            = azurerm_resource_group.RG.location
+  resource_group_name = azurerm_resource_group.RG.name
+
+  ip_configuration {
+    name                 = "configuration"
+    subnet_id            = azurerm_subnet.BastionOnprSubnet.id
+    public_ip_address_id = azurerm_public_ip.BastionOnprVIP.id
+  }
+}
+
+
+###################################################################################
 #Onprem  part creation:
 ###################################################################################
 ###################################################################################
@@ -174,15 +234,6 @@ resource "azurerm_subnet" "CSRExternalSubnet" {
 }
 
 
-#Create public IP for OnpremVM
-resource "azurerm_public_ip" "OnpremVMPublicIP" {
-  name                = "OnpremVMPublicIP"
-  resource_group_name = azurerm_resource_group.RG.name
-  location            = azurerm_resource_group.RG.location
-  allocation_method   = "Static"
-
-}
-
 #Create public IP of the CSR
 resource "azurerm_public_ip" "CSRVIP" {
   name                = "CSRVIP"
@@ -201,7 +252,6 @@ resource "azurerm_network_interface" "OnpremVMNic" {
     name                          = "internal"
     subnet_id                     = azurerm_subnet.OnpremVMSubnet.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id = azurerm_public_ip.OnpremVMPublicIP.id
   }
 }
 
@@ -303,60 +353,6 @@ resource "azurerm_virtual_machine" "OnpremCSR" {
 #NSG configuration
 ###################################################################################
 
-#NSG for Azure Subnet1
-###################################################################################
-
-resource "azurerm_network_security_group" "AzureVMNSG" {
-  name                = "AzureVMNSG"
-  location            = var.resource_group_location
-  resource_group_name = var.resource_group_name
-
-  security_rule {
-    name                       = "AllowOnprem"
-    priority                   = 100
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "*"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = "100.0.0.0/16"
-    destination_address_prefix = "*"
-  }
-}
-
-resource "azurerm_subnet_network_security_group_association" "AzureVMNSGlink" {
-  subnet_id                 = azurerm_subnet.AzureVMSubnet.id
-  network_security_group_id = azurerm_network_security_group.AzureVMNSG.id
-}
-
-###################################################################################
-
-#Create NSGs for Onprem Subnet1
-
-###################################################################################
-resource "azurerm_network_security_group" "OnpremSubnetNSG" {
-  name                = "OnpremSubnetNSG"
-  location            = var.resource_group_location
-  resource_group_name = var.resource_group_name
-
-  security_rule {
-    name                       = "AllowFromAzure"
-    priority                   = 100
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "*"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = "100.0.0.0/16"
-    destination_address_prefix = "*"
-  }
-}
-
-resource "azurerm_subnet_network_security_group_association" "OnpremSubnetNSGLink" {
-  subnet_id                 = azurerm_subnet.OnpremVMSubnet.id
-  network_security_group_id = azurerm_network_security_group.OnpremSubnetNSG.id
-}
-
 
 ###################################################################################
 
@@ -387,30 +383,5 @@ resource "azurerm_subnet_network_security_group_association" "CSRExternalNSGlink
 }
 
 ###################################################################################
-
-#Create NSGs for CSR Internal subnet
-resource "azurerm_network_security_group" "CSRInternalNSG" {
-  name                = "CSRInternalNSG"
-  location            = var.resource_group_location
-  resource_group_name = var.resource_group_name
-
-  security_rule {
-    name                       = "AllowToAzure"
-    priority                   = 100
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "*"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefixes     = ["10.0.1.0/24","192.168.25.0/24"]
-    destination_address_prefix = "100.0.0.0/16"
-  }
-}
-
-resource "azurerm_subnet_network_security_group_association" "CSRInternalNSGlink" {
-  subnet_id                 = azurerm_subnet.CSRInternalSubnet.id
-  network_security_group_id = azurerm_network_security_group.CSRInternalNSG.id
-}
-
 ###################################################################################
 

@@ -81,7 +81,7 @@ As soon as it's completed, you will be in the following conditions:
 - 2 VMs deployed – 1 in Azure 1 Onprem – sharing same IP address
 - NSGs deployed to core subnets on both sides, and already pre-configured with the needed security rules for granting final connectivity purposes
 
-_Note:_ For accessing the CSR and the VMs you will need to configure JIT access at VM level (the VMs have a public IP mapped, the JIT request will provide accessibility over SSH to the deployments)
+_Note:_ For accessing the CSR and the VMs you can use the Bastion deployments configured for Onprem and Azure VNETs. Considering the environments with overlapping IP ranges, this required deployment of 2 separate Bastion hosts, one for each VNET.
 
 Any VM in this lab will have the following access credentials configured:
 
