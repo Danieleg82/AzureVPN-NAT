@@ -60,6 +60,12 @@ git clone https://github.com/Danieleg82/AzureVPN-NAT
 cd ./AzureVPN-NAT/Main
 ```
 
+-Run the following to be able to deploy Cisco CSR appliance:
+
+```
+Get-AzMarketplaceTerms -Publisher "Cisco" -Product "cisco-csr-1000v" -Name "cisco-csr-1000v" | Set-AzMarketplaceTerms -Accept
+```
+
 -Initialize terraform and download the azurerm resource provider:
 
 ```
