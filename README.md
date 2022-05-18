@@ -329,6 +329,10 @@ When using **Dynamic NAT rules**, an IP address can be translated to different t
 
 Dynamic rules will result in stateful translation mappings depending on the traffic flows at any given time. Due to the nature of Dynamic NAT and the ever changing IP/Port combinations, flows that make use of Dynamic NAT rules have to be initiated from the  **InternalMapping**  (Pre-NAT) IP Range. The dynamic mapping is released once the flow is disconnected or gracefully terminated.
 
+NAT flow example -->
+
+![](Images/DynamicNAT.jpg)
+
 ====================================================================================================================================================================
 
 **GOLDEN RULE:**
