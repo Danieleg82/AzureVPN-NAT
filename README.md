@@ -82,7 +82,7 @@ terraform init
 terraform apply
 ```
 
-This will take around 20 minutes to complete to accommodate the time to deploy VNET Gateway
+This will take around 30/35 minutes to complete to accommodate the time to deploy VNET Gateway
 
 As soon as it's completed, you will be in the following conditions:
 
