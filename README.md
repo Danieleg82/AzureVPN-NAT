@@ -137,18 +137,11 @@ _Connection_
 ```Powershell
 New-AzVirtualNetworkGatewayConnection -Name Connection -ResourceGroupName $RG -Location $Location -VirtualNetworkGateway1 $VPNGW -LocalNetworkGateway2 $LNG -ConnectionType IPsec -EnableBgp $true -ConnectionProtocol IKEv2 -SharedKey 'MyVPNConnection1!' -IngressNatRule $ingressnatrule -EgressNatRule $egressnatrule
 ```
+As soon as this part is completed, the Azure side VPN GW will be properly configured with IPSEC settings and NAT rules and attempting to establish connectivity with the remote CSR.
 
 **TASK 3 – Configure Cisco and UDRs**
 
-Acquire JIT access to your Cisco CSR deployment – if needed – or create dedicated security rules in the NSG bound to the external subnet of the CSR (CSRExternalSubnet) to grant SSH connectivity from your public IP.
-
-SSH to the CSR
-
-Go to command prompt and type:
-
-```
-ssh AdminUser@CSRPublicIP
-```
+Use Bastion access to SSH into the CSR.
 
 Once connected to the CSR, enter config mode:
 
@@ -223,6 +216,7 @@ Type "Exit" or "End" or simply hit CTRL+Z to exit configurator, then type
 ```
 Wr
 ```
+The above configuration block configures the CSR to establish IPSEC connectivity with the remote Azure VPN GW and start relevant BGP advertisements.
 
 Validate the status of the IKEv2 tunnel:
 
@@ -379,7 +373,7 @@ Set-AzVirtualNetworkGatewayConnection -VirtualNetworkGatewayConnection $connecti
 
 **Task2 – Test VMs connectivity**
 
-Connect to both _AzureVM_ and _OnpremVM_ via SSH after a JIT request or NSG configuration.
+Connect to both _AzureVM_ and _OnpremVM_ via SSH through Bastion.
 
 From AzureVM side, run:
 
@@ -424,7 +418,7 @@ Enter YES when prompted.
 
 Wait until completion of new VM deployment.
 
-Configure JIT on the new VM (AzureVM2) and connect to it.
+Connect to AzureVM2 via Bastion.
 
 ![](Images/Lab2.jpg)
 
@@ -536,7 +530,7 @@ In the NIC effective routes of VM "AzureVM"and "AzureVM2" we can now see Azure V
 
 Let's finally proceed validating the effective connectivity between AzureVM and OnpremVM2 over a non-NATted destination IP range.
 
-Connect via SSH to both AzureVM and OnpremVM2 (configure JIT access or NSG security rules if needed).
+Connect via SSH to both AzureVM and OnpremVM2 via Bastion.
 
 From AzureVM, start a PING toward OnpremVM2:
 
