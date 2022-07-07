@@ -281,9 +281,9 @@ Get-AzVirtualNetwork -Name 'OnpremVNET' -ResourceGroupName $RG | Set-azvirtualne
 
 Now check the IPSEC and BGP connectivity status from VPN Gateway side:
 
-![](Images/AzurePortal_connectionConnected.jpg)
+![](Images/Connected.jpg)
 
-![](Images/AzurePortal_ReceivedRoutes.jpg)
+![](Images/ReceivedRoutes.jpg)
 
 Note how VPN Gateway is ignoring the route received from CSR since it's already covered by its own internal network-rule for the NATted range 100.0.2.0/24
 
