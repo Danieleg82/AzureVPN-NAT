@@ -96,6 +96,17 @@ Also, depending on the subscription used for deploying this environment, you may
 
 Any relevant NSG for allowing Inbound/Outbound traffic on the different subnets will have to be configured manually, if needed.
 
+For simplicity, recommendation is to create the following type of Security rules in all the NSGs applied to the environment if allowed:
+
+INBOUND + OUTBOUND:
+
+FROM: 10.0.0.0/8,100.0.0.0/8,192.168.0.0/16
+TO: 10.0.0.0/8,100.0.0.0/8,192.168.0.0/16
+ACTION: ALLOW
+PROTOCOL and PORTS: ANY/ANY
+
+Eventually, any NSG applied to CSR external subnet has to be configured to allow ANY traffic from/to the public IP of the Azure VPN GW.
+
 Any VM in this lab will have the following access credentials configured:
 
 ```
