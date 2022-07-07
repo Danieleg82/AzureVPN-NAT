@@ -263,7 +263,7 @@ Show ip bgp summary
 Show ip bgp
 ```
 
-![](Images/ShoIPBGP.jpg)
+![](Images/ShowIPBGP.jpg)
 
 Note the routes CSR is receiving from VNET Gateway:
 
