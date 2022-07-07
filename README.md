@@ -22,7 +22,7 @@ We will cover the differences between Static and Dynamic NAT modes with relevant
 
 In this first part, we will build a basic environment composed as per the following diagram:
 
-![](Images/Lab1.jpg)
+![](Images/Lab1new.jpg)
 
 A first VNET will emulate an onprem branch to be connected to Azure side.
 
@@ -438,7 +438,7 @@ Wait until completion of new VM deployment.
 
 Connect to AzureVM2 via Bastion.
 
-![](Images/Lab2.jpg)
+![](Images/Lab2new.jpg)
 
 Now run:
 
@@ -464,7 +464,7 @@ We will add a new address-space to the Onprem VNET and we&#39;ll create a subnet
 
 The goal will be to connect AzureVM with OnpremVM2
 
-![](Images/Lab3.jpg)
+![](Images/Lab3new.jpg)
 
 Let's start adding an extra address space to our onprem network:
 
