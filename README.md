@@ -114,7 +114,7 @@ _LNG_
 
 ```Powershell
 
-$RG = "VPNGWNATRG"
+$RG = "VPNNAT"
 $Location = "West Europe"
 $GWName = "AzureGW"
 $CSRPublicIP = Get-AzPublicIpAddress -Name CSRVIP -ResourceGroupName $RG
