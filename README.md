@@ -512,6 +512,11 @@ network 192.168.25.0 mask 255.255.255.0
 exit-address-family
 ip route 192.168.25.0 255.255.255.0 10.0.10.1
 ```
+Type "Exit" or "End" or simply hit CTRL+Z to exit configurator, then type
+
+```
+Wr
+```
 
 Check the new advertised routes from CSR side:
 
