@@ -350,38 +350,5 @@ resource "azurerm_virtual_machine" "OnpremCSR" {
 }
 
 ###################################################################################
-#NSG configuration
-###################################################################################
-
-
-###################################################################################
-
-#Create NSGs for CSR External subnet
-
-###################################################################################
-resource "azurerm_network_security_group" "CSRExternalNSG" {
-  name                = "CSRExternalNSG"
-  location            = var.resource_group_location
-  resource_group_name = var.resource_group_name
-
-  security_rule {
-    name                       = "AllowfromGWVIP"
-    priority                   = 100
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "*"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = "AzureCLoud.${var.resource_group_location}"
-    destination_address_prefix = "*"
-  }
-}
-
-resource "azurerm_subnet_network_security_group_association" "CSRExternalNSGlink" {
-  subnet_id                 = azurerm_subnet.CSRExternalSubnet.id
-  network_security_group_id = azurerm_network_security_group.CSRExternalNSG.id
-}
-
-###################################################################################
 ###################################################################################
 
