@@ -188,7 +188,7 @@ interface Loopback1
 ip address 192.168.1.1 255.255.255.255
 !
 interface Tunnel1
-ip address 10.0.3.10 255.255.255.255
+ip address 192.168.2.1 255.255.255.255
 ip tcp adjust-mss 1350
 tunnel source 10.0.3.4
 tunnel mode ipsec ipv4
