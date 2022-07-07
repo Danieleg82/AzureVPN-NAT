@@ -272,14 +272,14 @@ Gateway is advertising 2 routes: a generic 10.0.0.0/16 one and the specific one 
 An integration with **Azure Route Server** in our emulated onprem environment would allow to avoid any static route configuration on that side, but this is out of scope here, so in order to create appropriate routing from the Onprem VM back to Azure we need to configure a UDR mapped to Onprem VM subnet:
 
 ```Powershell
-$RG = "VPNGWNATRG"
+$RG = "VPNNAT"
 $Location = "West Europe"
 $OnpremRT = New-AzRouteTable -Name 'OnpremRT' -ResourceGroupName $RG -location $Location
 Get-AzRouteTable -ResourceGroupName $RG -Name 'OnpremRT'| Add-AzRouteConfig -Name "ToAzure" -AddressPrefix 100.0.0.0/16 -NextHopType "VirtualAppliance" -NextHopIpAddress 10.0.10.4 | Set-AzRouteTable
 Get-AzVirtualNetwork -Name 'OnpremVNET' -ResourceGroupName $RG | Set-azvirtualnetworksubnetConfig -Name 'Subnet1' -AddressPrefix 10.0.1.0/24 -RouteTable $OnpremRT | set-AzVirtualNetwork
 ```
 
-Now check the IPSEC &amp; BGP connectivity status from VPN Gateway side:
+Now check the IPSEC and BGP connectivity status from VPN Gateway side:
 
 ![](Images/AzurePortal_connectionConnected.jpg)
 
