@@ -364,8 +364,10 @@ We will now create an Egress Dynamic NAT rule linking traffic from Azure side to
 
 ```Powershell
 $GWIPconfig= $VPNGW.IpConfigurations.id
+$ingressnatrule = Get-AzVirtualNetworkGatewayNatRule -ResourceGroupName $RG -Name "IngressRule" -ParentResourceName AzureGW
+$egressnatrule = Get-azVirtualNetworkGatewayNatRule -ResourceGroupName $RG -Name "EgressRule" -ParentResourceName AzureGW
 $Dynamicegressnatrule = New-AzVirtualNetworkGatewayNatRule -Name "DynamicEgressRule" -Type "Dynamic" -IpConfigurationId $GWIPconfig -Mode "EgressSnat" -InternalMapping @("10.0.1.0/24") -ExternalMapping @("100.0.1.15/32")
-Set-AzVirtualNetworkGateway -VirtualNetworkGateway $VPNGW -NatRule $Dynamicegressnatrule -BgpRouteTranslationForNat $true
+Set-AzVirtualNetworkGateway -VirtualNetworkGateway $VPNGW -NatRule $Dynamicegressnatrule,$ingressnatrule,$egressnatrule -BgpRouteTranslationForNat $true
 ```
 
 We will finally link the new NAT rule to the existing VPN connection:
