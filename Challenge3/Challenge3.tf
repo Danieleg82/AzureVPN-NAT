@@ -38,8 +38,8 @@ resource "azurerm_linux_virtual_machine" "OnpremVM2" {
   resource_group_name = var.resource_group_name
   location            = var.resource_group_location
   size                = "Standard_B2s"
-  admin_username      = "adminuser"
-  admin_password      = "Danny_lab_82"
+  admin_username      = "AdminUser"
+  admin_password      = "MyVPNGWNAT_Lab!"
   disable_password_authentication = false
   network_interface_ids = [
     azurerm_network_interface.OnpremVM2Nic.id,
