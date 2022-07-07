@@ -25,13 +25,6 @@ data "azurerm_subnet" "Subnet1" {
   resource_group_name  = var.resource_group_name
 }
 
-  resource "azurerm_public_ip" "AzureVM2PublicIP" {
-  name                = "AzurePublicIP2"
-  resource_group_name = var.resource_group_name
-  location            = var.resource_group_location
-  allocation_method   = "Static"
-
-}
 
 resource "azurerm_network_interface" "AzureVM2Nic" {
   name                = "AzureVM2NIC"
@@ -42,7 +35,6 @@ resource "azurerm_network_interface" "AzureVM2Nic" {
     name                          = "internal"
     subnet_id                     = data.azurerm_subnet.Subnet1.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id = azurerm_public_ip.AzureVM2PublicIP.id
   }
 }
 
