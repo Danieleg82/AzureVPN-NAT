@@ -135,6 +135,8 @@ Set-AzVirtualNetworkGateway -VirtualNetworkGateway $VPNGW -NatRule $ingressnatru
 _Connection_
 
 ```Powershell
+$ingressnatrule = Get-AzVirtualNetworkGatewayNatRule -ResourceGroupName $RG -Name "IngressRule" -ParentResourceName AzureGW
+$egressnatrule = Get-azVirtualNetworkGatewayNatRule -ResourceGroupName $RG -Name "EgressRule" -ParentResourceName AzureGW
 New-AzVirtualNetworkGatewayConnection -Name Connection -ResourceGroupName $RG -Location $Location -VirtualNetworkGateway1 $VPNGW -LocalNetworkGateway2 $LNG -ConnectionType IPsec -EnableBgp $true -ConnectionProtocol IKEv2 -SharedKey 'MyVPNConnection1!' -IngressNatRule $ingressnatrule -EgressNatRule $egressnatrule
 ```
 As soon as this part is completed, the Azure side VPN GW will be properly configured with IPSEC settings and NAT rules and attempting to establish connectivity with the remote CSR.
