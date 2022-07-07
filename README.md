@@ -257,7 +257,7 @@ Now validate the status of BGP peering between VNET Gateway and CSR:
 Show ip bgp summary
 ```
 
-![](Images/ShoIPBGPSummary.jpg)
+![](Images/ShowIPBGPSummary.jpg)
 
 ```
 Show ip bgp
