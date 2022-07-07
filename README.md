@@ -459,7 +459,6 @@ Let's start adding an extra address space to our onprem network:
 
 ```Powershell
 $RG= "VPNNAT"
-$Location= "West Europe"
 $VNET=Get-AzVirtualNetwork -Name OnpremVNET -ResourceGroupName $RG
 $VNET.AddressSpace.AddressPrefixes.Add("192.168.25.0/24")
 Set-AzVirtualNetwork -VirtualNetwork $VNET
@@ -490,7 +489,6 @@ Now we associate to the new Subnet2 the same UDR as Subnet1, for static redirect
 
 ```Powershell
 $RG="VPNNAT"
-$Location="West Europe"
 $OnpremRT=Get-AzRouteTable -ResourceGroupName $RG -Name OnpremRT
 Get-AzVirtualNetwork -Name 'OnpremVNET' -ResourceGroupName $RG|Set-azvirtualnetworksubnetConfig -Name 'Subnet2'-AddressPrefix 192.168.25.0/24 -RouteTable $OnpremRT|set-AzVirtualNetwork
 ```
