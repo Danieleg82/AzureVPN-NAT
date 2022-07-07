@@ -89,9 +89,12 @@ As soon as it's completed, you will be in the following conditions:
 - An Azure VNET with a VNET-Gateway installed but not configured with any connection or NAT rule
 - An Onprem site (emulated with a VNET with overlapping IP space) with a Cisco CSR router deployed but not configured
 - 2 VMs deployed – 1 in Azure 1 Onprem – sharing same IP address
-- NSGs deployed to core subnets on both sides, and already pre-configured with the needed security rules for granting final connectivity purposes
+
 
 _Note:_ For accessing the CSR and the VMs you can use the Bastion deployments configured for Onprem and Azure VNETs. Considering the environments with overlapping IP ranges, this required deployment of 2 separate Bastion hosts, one for each VNET.
+Also, depending on the subscription used for deploying this environment, you may have policies applied to override NSG settings, hence my choice to not preconfigure NSGs on this environment.
+
+Any relevant NSG for allowing Inbound/Outbound traffic on the different subnets will have to be configured manually, if needed.
 
 Any VM in this lab will have the following access credentials configured:
 
@@ -299,7 +302,7 @@ BGP peer IP address consideration for a NAT&#39;ed on-premises network:
 
 **TASK 4 – Test VMs connectivity**
 
-Connect to both _AzureVM_ and _OnpremVM_ via SSH after a JIT request or NSG configuration.
+Connect to both _AzureVM_ and _OnpremVM_ via Bastion.
 
 From AzureVM side, run:
 
@@ -460,7 +463,7 @@ $VNET.AddressSpace.AddressPrefixes.Add("192.168.25.0/24")
 Set-AzVirtualNetwork -VirtualNetwork $VNET
 ```
 
-Let's then proceed with the creation of an extra subnet (and relevant NSG) in this new address range + a VM:
+Let's then proceed with the creation of an extra subnet (and relevant NSG if needed) in this new address range + a VM:
 
 In CloudShell, enter in the Challenge3 module:
 
