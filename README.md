@@ -350,7 +350,7 @@ If Dynamic NAT is applied as EgressNAT, only Azure side will be able to initiate
 As first step we will disassociate existing EgressNAT rules from our connection:
 
 ```Powershell
-$RG = "VPNGWNATRG"
+$RG = "VPNNAT"
 $GWName = "AzureGW"
 $VPNGW = Get-AzVirtualNetworkGateway -Name $GWName -ResourceGroupName $RG
 $connection = Get-AzVirtualNetworkGatewayConnection -Name Connection -ResourceGroupName $RG
@@ -456,7 +456,7 @@ The goal will be to connect AzureVM with OnpremVM2
 Let's start adding an extra address space to our onprem network:
 
 ```Powershell
-$RG= "VPNGWNATRG"
+$RG= "VPNNAT"
 $Location= "West Europe"
 $VNET=Get-AzVirtualNetwork -Name OnpremVNET -ResourceGroupName $RG
 $VNET.AddressSpace.AddressPrefixes.Add("192.168.25.0/24")
@@ -487,7 +487,7 @@ Type YES when prompted.
 Now we associate to the new Subnet2 the same UDR as Subnet1, for static redirection of AzureVNET traffic via IPSEC tunnel
 
 ```Powershell
-$RG="VPNGWNATRG"
+$RG="VPNNAT"
 $Location="West Europe"
 $OnpremRT=Get-AzRouteTable -ResourceGroupName $RG -Name OnpremRT
 Get-AzVirtualNetwork -Name 'OnpremVNET' -ResourceGroupName $RG|Set-azvirtualnetworksubnetConfig -Name 'Subnet2'-AddressPrefix 192.168.25.0/24 -RouteTable $OnpremRT|set-AzVirtualNetwork
