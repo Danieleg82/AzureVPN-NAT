@@ -198,7 +198,7 @@ tunnel protection ipsec profile to-Azure-IPsecProfile
 router bgp 65001
 bgp router-id 192.168.1.1
 bgp log-neighbor-changes
-neighbor 10.0.2.254 remote-as 65600
+neighbor 10.0.2.254 remote-as 65515
 neighbor 10.0.2.254 ebgp-multihop 255
 neighbor 10.0.2.254 update-source Loopback1
 !
