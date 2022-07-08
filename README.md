@@ -382,10 +382,6 @@ $egressnatrule = Get-azVirtualNetworkGatewayNatRule -ResourceGroupName $RG -Name
 $Dynamicegressnatrule = New-AzVirtualNetworkGatewayNatRule -Name "DynamicEgressRule" -Type "Dynamic" -IpConfigurationId $GWIPconfig -Mode "EgressSnat" -InternalMapping @("10.0.1.0/24") -ExternalMapping @("100.0.1.15/32")
 Set-AzVirtualNetworkGateway -VirtualNetworkGateway $VPNGW -NatRule $Dynamicegressnatrule,$ingressnatrule,$egressnatrule -BgpRouteTranslationForNat $true
 ```
-Let's now make sure that the new range of our Dynamic NAT rule ("100.0.1.15/32") is correctly advertised by VPN-GW to CSR with a "Show ip bgp" command on CSR side:
-
-![](Images/ShowBGPAFterDynamic.jpg)
-
 
 We will finally link the new NAT rule to the existing VPN connection:
 
@@ -394,6 +390,9 @@ $Dynamicegressnatrule = Get-AzVirtualNetworkGatewayNatRule -ResourceGroupName $R
 $connection.EgressNatRules = $Dynamicegressnatrule
 Set-AzVirtualNetworkGatewayConnection -VirtualNetworkGatewayConnection $connection -Force
 ```
+Let's now make sure that the new range of our Dynamic NAT rule ("100.0.1.15/32") is correctly advertised by VPN-GW to CSR with a "Show ip bgp" command on CSR side:
+
+![](Images/ShowBGPAFterDynamic.jpg)
 
 **Task2 – Test VMs connectivity**
 
