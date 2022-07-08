@@ -225,6 +225,8 @@ exit-address-family
 ip route 10.0.2.254 255.255.255.255 Tunnel1
 !Static route to internal workload subnet
 ip route 10.0.1.0 255.255.255.0 10.0.10.1
+!Static route to keep 10/16 traffic local
+ip route 10.0.0.0 255.255.0.0 10.0.10.1
 ```
 
 Type "Exit" or "End" or simply hit CTRL+Z to exit configurator, then type
@@ -318,7 +320,7 @@ Connect to both _AzureVM_ and _OnpremVM_ via Bastion.
 From AzureVM side, run:
 
 ```
-Ping 100.0.2.4
+ping 100.0.2.4
 ```
 
 ![](Images/Ping100.0.2.4.jpg)
@@ -326,7 +328,7 @@ Ping 100.0.2.4
 From OnpremVM side, run:
 
 ```
-Sudo tcpdump icmp -n
+sudo tcpdump icmp -n
 ```
 
 **Question:** What's the source IP generating ICMP requests seen by OnpremVM?
@@ -396,7 +398,7 @@ Connect to both _AzureVM_ and _OnpremVM_ via SSH through Bastion.
 From AzureVM side, run:
 
 ```
-Ping 100.0.2.4
+ping 100.0.2.4
 ```
 
 ![](Images/Ping100.0.2.4_2.jpg)
@@ -404,7 +406,7 @@ Ping 100.0.2.4
 From OnpremVM side, run:
 
 ```
-Sudo tcpdump icmp -n
+sudo tcpdump icmp -n
 ```
 
 **Question:** What's the source IP generating ICMP requests seen by OnpremVM?
@@ -423,13 +425,13 @@ cd ./AzureVPN-NAT/DeployVM
 Run:
 
 ```
-Terraform Init
+terraform init
 ```
 
 and start deployment:
 
 ```
-Terraform apply
+terraform apply
 ```
 
 Enter YES when prompted.
@@ -443,7 +445,7 @@ Connect to AzureVM2 via Bastion.
 Now run:
 
 ```
-Ping 100.0.2.4
+ping 100.0.2.4
 ```
 
 Connect back to OnpremVM (make sure that TCPDUMP is still running on it, and that PING is still running as well from AzureVM)
@@ -485,13 +487,13 @@ cd ./AzureVPN-NAT/Challenge3
 Run:
 
 ```
-Terraform Init
+terraform init
 ```
 
 and start deployment:
 
 ```
-Terraform apply
+terraform apply
 ```
 
 Type YES when prompted.
@@ -556,7 +558,7 @@ Connect via SSH to both AzureVM and OnpremVM2 via Bastion.
 From AzureVM, start a PING toward OnpremVM2:
 
 ```
-Ping 192.168.25.4
+ping 192.168.25.4
 ```
 
 ![](Images/Ping192.168.25.4.jpg)
@@ -564,7 +566,7 @@ Ping 192.168.25.4
 From OnpremVM2, run:
 
 ```
-Sudo tcpdump -n icmp
+sudo tcpdump -n icmp
 ```
 
 **Question:** Which source IP is seen by OnpremVM2 for this ICMP traffic?
